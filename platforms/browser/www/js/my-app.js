@@ -17,7 +17,7 @@ $$(document).on('deviceready', function() {
 
 // Option 1. Using page callback for page (for "about" page in this case) (recommended way):
 myApp.onPageInit('index', function(page) {
-  getHomePage();
+  //getHomePage();
 });
 
 myApp.onPageInit('timetable', function(page) {
@@ -46,7 +46,7 @@ $$(document).on('pageInit', '.page[data-page="about"]', function(e) {
 });
 
 $$('#id-home').on('click', function() {
-  getHomePage();
+  //getHomePage();
 });
 
 $$('#id-calendar').on('click', function() {
@@ -56,6 +56,11 @@ $$('#id-calendar').on('click', function() {
 $$('#id-news').on('click', function() {
   console.log('id-news');
   getNews();
+});
+
+$$('#id-timetable').on('click', function() {
+  console.log('id-timetable');
+  getTimetable();
 });
 
 $$('.panel-left').on('panel:open', function() {
@@ -98,34 +103,18 @@ function getCalendars() {
 }
 
 //--- Hanchiang Home Page ---
-function getHomePage() {
+function getTimetable() {
   var content = '';
-  const apiRoot = 'http://hcu.edu.my/wp-json';
-  // http://hcu.edu.my/wp-json/wp/v2/pages/7765/
+  const apiRoot = 'https://hjuapp.site/wp-json';
+
   var wp = new WPAPI({ endpoint: apiRoot });
 
-  // wp.pages()
-  //   .id(7765)
-  //   .then(function(posts) {
-  //     console.log(posts);
-  //     posts.forEach(function(post) {
-  //       console.log(post.content.rendered);
-  //       content += post.content.rendered;
-  //     });
-  //     $$('#id-home-content').html(content);
-  //   });
+  wp.posts()
+    .categories(7)
+    .then(function(posts) {
+      console.log(posts[0].content.rendered);
+      content = posts[0].content.rendered;
 
-  wp.pages()
-    .id(7765)
-    .then(function(pages) {
-      content = pages.content.rendered;
-      console.log(content);
-      $$('#id-home-content').html(content);
-      // pages.forEach(function(page) {
-      //   console.log(page.content.rendered);
-      //   content += page.content.rendered;
-      // });
-      // console.log(content);
-      // $$('#id-home-content').html(content);
+      $$('#id-timetable-content').html(content);
     });
 }
